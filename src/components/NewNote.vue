@@ -3,22 +3,43 @@
         <label>Название</label>
         <input v-model="note.title" type="text">
         <label>Содержание</label>
-        <textarea v-model="note.desc"></textarea>
+        <textarea v-model="note.desc">
+        </textarea>
+        <button type="button" @click="showEmoji = !showEmoji">
+        😃
+        </button>
+        <EmojiPiker
+            v-show="showEmoji"
+            @close="showEmoji = !showEmoji"
+            @add-emoji="addEmoji"
+        />
         <button @click="addNote">Добавить заметку</button>
     </div>
 </template>
 
 <script>
+import EmojiPiker from './EmojiPiker.vue';
 export default {
+    components: {
+        EmojiPiker
+    },
     props: {
         note: {
             type: Object,
             required: true,
         }
     },
+    data () {
+    return {
+        showEmoji: false,
+    }
+    },
     methods: {
         addNote() {
             this.$emit('addNote', this.note)//название в скобках может быть любое
+        },
+        addEmoji(piker) {
+            this.note.desc += piker
         }
     }
 }
